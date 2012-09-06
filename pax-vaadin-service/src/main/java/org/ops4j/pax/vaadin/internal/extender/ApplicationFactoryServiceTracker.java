@@ -1,5 +1,6 @@
 package org.ops4j.pax.vaadin.internal.extender;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,15 +87,15 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
         protected Class<? extends Application> getApplicationClass() throws ClassNotFoundException {
             return m_factory.getApplicationClass();
         }
-        
+
         @Override
-        protected void setAjaxPageHeaders(final HttpServletResponse response) {
-            super.setAjaxPageHeaders(response);
+        protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
             if (m_factory instanceof HasCustomServletHeaders) {
                 for (final Map.Entry<String,String> entry : ((HasCustomServletHeaders)m_factory).getHeaders().entrySet()) {
                     response.addHeader(entry.getKey(), entry.getValue());
                 }
             }
+            super.service(request, response);
         }
     }
 
