@@ -8,8 +8,10 @@ import java.util.Properties;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.ops4j.pax.vaadin.ApplicationFactory;
+import org.ops4j.pax.vaadin.HasCustomServletHeaders;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -31,6 +33,7 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
         
     }
     
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Object addingService(ServiceReference reference) {
         ApplicationFactory factory = (ApplicationFactory) super.addingService(reference);
@@ -66,7 +69,8 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
     }
     
     private class FactoryServlet extends AbstractApplicationServlet{
-        
+        private static final long serialVersionUID = -3634065747456096044L;
+
         private ApplicationFactory m_factory;
 
         public FactoryServlet(ApplicationFactory factory) {
@@ -83,6 +87,15 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
             return m_factory.getApplicationClass();
         }
         
+        @Override
+        protected void setAjaxPageHeaders(final HttpServletResponse response) {
+            super.setAjaxPageHeaders(response);
+            if (m_factory instanceof HasCustomServletHeaders) {
+                for (final Map.Entry<String,String> entry : ((HasCustomServletHeaders)m_factory).getHeaders().entrySet()) {
+                    response.addHeader(entry.getKey(), entry.getValue());
+                }
+            }
+        }
     }
 
 }
