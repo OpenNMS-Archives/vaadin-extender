@@ -6,12 +6,14 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.vaadin.Application;
+import com.vaadin.ui.UI;
 
 public interface ApplicationFactory {
 
-    public Application createApplication(HttpServletRequest request) throws ServletException;
-    public Class<? extends Application> getApplicationClass() throws ClassNotFoundException;
+    public UI createApplication(HttpServletRequest request) throws ServletException;
+    public Class<? extends UI> getApplicationClass() throws ClassNotFoundException;
+    
+    public UI getUI();
     
     public Map<String,String> getAdditionalHeaders();
     public String getAdditionalHeadContent();

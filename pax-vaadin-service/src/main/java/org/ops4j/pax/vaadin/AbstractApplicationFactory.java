@@ -7,16 +7,19 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.vaadin.Application;
+import com.vaadin.ui.UI;
 
 public abstract class AbstractApplicationFactory implements ApplicationFactory {
 
     @Override
-    public abstract Application createApplication(HttpServletRequest request) throws ServletException;
+    public abstract UI createApplication(HttpServletRequest request) throws ServletException;
 
     @Override
-    public abstract Class<? extends Application> getApplicationClass() throws ClassNotFoundException;
+    public abstract Class<? extends UI> getApplicationClass() throws ClassNotFoundException;
 
+    @Override
+    public abstract UI getUI();
+    
     @Override
     public Map<String, String> getAdditionalHeaders() {
         return Collections.emptyMap();

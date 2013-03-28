@@ -6,13 +6,13 @@
     <parent>
         <artifactId>vaadin</artifactId>
         <groupId>org.ops4j.pax</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.ops4j.pax.vaadin</groupId>
     <artifactId>feature</artifactId>
     <packaging>pom</packaging>
-    <name>feature feature</name>
+    <name>Simple Vaadin 7 Feature</name>
     <description>Create a feature with the defined dependencies set.</description>
     
     <dependencies>
@@ -23,32 +23,71 @@
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.vaadin.samples</groupId>
-            <artifactId>ColorPicker</artifactId>
+            <artifactId>SimpleApplication</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-shared</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-shared-deps</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.7.2</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.ops4j.pax.vaadin.samples</groupId>
+            <artifactId>ColorPicker</artifactId>
+            <version>${project.version}</version>
+		</dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.karaf.tooling</groupId>
+                <groupId>org.opennms.maven.plugins</groupId>
                 <artifactId>features-maven-plugin</artifactId>
-                <version>2.2.7</version>
+                <version>1.0.1</version>
                 <executions>
-                    <execution>
-                        <id>generate-features-file</id>
-                        <goals>
-                            <goal>generate-features-file</goal>
-                        </goals>
-                        <configuration>
-                            <karafVersion>2.2.7</karafVersion>
-                            <addTransitiveFeatures>true</addTransitiveFeatures>
-                            <includeDependencies>true</includeDependencies>
-                        </configuration>
-                    </execution>
-                </executions>
+		          <execution>
+		            <phase>process-resources</phase>
+		            <goals><goal>generate-features-xml</goal></goals>
+		          </execution>
+		        </executions>
             </plugin>
         </plugins>
     </build>
-
+    
+    <pluginRepositories>
+        <pluginRepository>
+	      <snapshots><enabled>false</enabled></snapshots>
+	      <releases><enabled>true</enabled></releases>
+	      <id>opennms-repo</id>
+	      <name>OpenNMS Repository</name>
+	      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+	    </pluginRepository>
+    </pluginRepositories>
+        
 </project>

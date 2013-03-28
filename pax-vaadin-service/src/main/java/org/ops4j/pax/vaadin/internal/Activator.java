@@ -69,7 +69,7 @@ public class Activator implements BundleActivator {
 	private void createAndRegisterVaadinResourceServlet() {
 		Bundle vaadin = null;
 		for (Bundle bundle : bundleContext.getBundles()) {
-			if ("com.vaadin".equals(bundle.getSymbolicName())) {
+			if ("com.vaadin.client-compiled".equals(bundle.getSymbolicName())) {
 				vaadin = bundle;
 				break;
 			}

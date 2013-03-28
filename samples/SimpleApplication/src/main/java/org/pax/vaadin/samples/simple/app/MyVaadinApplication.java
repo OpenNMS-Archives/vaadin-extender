@@ -15,28 +15,30 @@
  */
 package org.pax.vaadin.samples.simple.app;
 
-import com.vaadin.Application;
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.annotations.Title;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 /**
  * The Application's "main" class
  */
 @SuppressWarnings("serial")
-public class MyVaadinApplication extends Application
+@Title("My Test Vaadin Application")
+public class MyVaadinApplication extends UI
 {
-    private Window window;
+    private VerticalLayout window;
     
     @Override
-    public void init()
+    public void init(VaadinRequest request)
     {
-        window = new Window("My Vaadin Application");
-        setMainWindow(window);
+        window = new VerticalLayout();
+        setContent(window);
         Button button = new Button("Click Me");
-        button.addListener(new Button.ClickListener() {
+        button.addClickListener(new Button.ClickListener() {
             public void buttonClick(ClickEvent event) {
                 window.addComponent(new Label("Thank you for clicking"));
             }

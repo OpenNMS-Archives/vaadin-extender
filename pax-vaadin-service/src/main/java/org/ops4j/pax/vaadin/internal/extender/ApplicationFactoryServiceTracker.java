@@ -1,10 +1,8 @@
 package org.ops4j.pax.vaadin.internal.extender;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -14,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ops4j.pax.vaadin.ApplicationFactory;
-import org.ops4j.pax.vaadin.ScriptTag;
+import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -22,9 +20,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.Application;
-import com.vaadin.terminal.gwt.server.AbstractApplicationServlet;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.UI;
 
 public class ApplicationFactoryServiceTracker extends ServiceTracker {
     
@@ -41,9 +37,8 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
     @Override
     public Object addingService(ServiceReference reference) {
         ApplicationFactory factory = (ApplicationFactory) super.addingService(reference);
-        FactoryServlet servlet = new FactoryServlet(factory);
+        FactoryServlet servlet = new FactoryServlet(factory.getUI());
         Dictionary props = new Properties();
-        
         
         for(String key : reference.getPropertyKeys()) {
             props.put(key, reference.getProperty(key));
@@ -75,24 +70,24 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
         super.removedService(reference, service);
     }
     
-    private class FactoryServlet extends AbstractApplicationServlet {
+    private class FactoryServlet extends VaadinOSGiServlet {
         private static final long serialVersionUID = 7458986273769030388L;
 
         private ApplicationFactory m_factory;
 
-        public FactoryServlet(ApplicationFactory factory) {
-            m_factory = factory;
+        public FactoryServlet(UI application) {
+            super(application);
         }
         
-        @Override
-        protected Application getNewApplication(HttpServletRequest request) throws ServletException {
-            return m_factory.createApplication(request);
-        }
-
-        @Override
-        protected Class<? extends Application> getApplicationClass() throws ClassNotFoundException {
-            return m_factory.getApplicationClass();
-        }
+//        @Override
+//        protected Application getNewApplication(HttpServletRequest request) throws ServletException {
+//            return m_factory.createApplication(request);
+//        }
+//
+//        @Override
+//        protected Class<? extends Application> getApplicationClass() throws ClassNotFoundException {
+//            return m_factory.getApplicationClass();
+//        }
 
         @Override
         protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
@@ -105,45 +100,45 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
             super.service(request, response);
         }
 
-        @Override
-        protected void writeAjaxPageHtmlBodyStart(final BufferedWriter page, final HttpServletRequest request) throws IOException {
-            super.writeAjaxPageHtmlBodyStart(page, request);
-            final String content = m_factory.getAdditionalBodyStartContent();
-            if (content != null) {
-                page.write(content);
-            }
-        }
-
-        @Override
-        protected void writeAjaxPageHtmlHeadStart(final BufferedWriter page, final HttpServletRequest request) throws IOException {
-            super.writeAjaxPageHtmlHeadStart(page, request);
-            final String content = m_factory.getAdditionalHeadContent();
-            if (content != null) {
-                page.write(content);
-            }
-        }
-
-        @Override
-        protected void writeAjaxPageHtmlVaadinScripts(final Window window, final String themeName, final Application application, final BufferedWriter page, final String appUrl, final String themeUri, final String appId, final HttpServletRequest request) throws ServletException, IOException {
-            super.writeAjaxPageHtmlVaadinScripts(window, themeName, application, page, appUrl, themeUri, appId, request);
-            final List<ScriptTag> scripts = m_factory.getAdditionalScripts();
-            if (scripts != null && scripts.size() > 0) {
-                for (final ScriptTag tag : scripts) {
-                    page.write("<script");
-                    if (tag.getSource() != null) {
-                        page.write(" src=\"" + tag.getSource() + "\"");
-                    }
-                    if (tag.getType() != null) {
-                        page.write(" type=\"" + tag.getType() + "\"");
-                    }
-                    page.write(">");
-                    if (tag.getContents() != null) {
-                        page.write(tag.getContents());
-                    }
-                    page.write("</script>\n");
-                }
-            }
-        }
+//        @Override
+//        protected void writeAjaxPageHtmlBodyStart(final BufferedWriter page, final HttpServletRequest request) throws IOException {
+//            super.writeAjaxPageHtmlBodyStart(page, request);
+//            final String content = m_factory.getAdditionalBodyStartContent();
+//            if (content != null) {
+//                page.write(content);
+//            }
+//        }
+//
+//        @Override
+//        protected void writeAjaxPageHtmlHeadStart(final BufferedWriter page, final HttpServletRequest request) throws IOException {
+//            super.writeAjaxPageHtmlHeadStart(page, request);
+//            final String content = m_factory.getAdditionalHeadContent();
+//            if (content != null) {
+//                page.write(content);
+//            }
+//        }
+//
+//        @Override
+//        protected void writeAjaxPageHtmlVaadinScripts(final Window window, final String themeName, final Application application, final BufferedWriter page, final String appUrl, final String themeUri, final String appId, final HttpServletRequest request) throws ServletException, IOException {
+//            super.writeAjaxPageHtmlVaadinScripts(window, themeName, application, page, appUrl, themeUri, appId, request);
+//            final List<ScriptTag> scripts = m_factory.getAdditionalScripts();
+//            if (scripts != null && scripts.size() > 0) {
+//                for (final ScriptTag tag : scripts) {
+//                    page.write("<script");
+//                    if (tag.getSource() != null) {
+//                        page.write(" src=\"" + tag.getSource() + "\"");
+//                    }
+//                    if (tag.getType() != null) {
+//                        page.write(" type=\"" + tag.getType() + "\"");
+//                    }
+//                    page.write(">");
+//                    if (tag.getContents() != null) {
+//                        page.write(tag.getContents());
+//                    }
+//                    page.write("</script>\n");
+//                }
+//            }
+//        }
     }
 
 }

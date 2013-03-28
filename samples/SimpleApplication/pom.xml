@@ -5,7 +5,7 @@
     <parent>
         <artifactId>samples</artifactId>
         <groupId>org.ops4j.pax.vaadin</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
     <groupId>org.ops4j.pax.vaadin.samples</groupId>
     <artifactId>SimpleApplication</artifactId>
@@ -37,8 +37,24 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin</artifactId>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-server</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-client</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-client-compiled</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-themes</artifactId>
+          <scope>provided</scope>
         </dependency>
     </dependencies>
 

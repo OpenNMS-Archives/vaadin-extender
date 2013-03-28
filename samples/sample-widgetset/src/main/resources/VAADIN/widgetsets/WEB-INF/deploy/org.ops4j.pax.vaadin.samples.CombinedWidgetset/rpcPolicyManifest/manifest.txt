@@ -1,0 +1,2 @@
+# Module org.ops4j.pax.vaadin.samples.CombinedWidgetset
+# RPC service class, partial path of RPC policy file

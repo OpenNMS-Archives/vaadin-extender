@@ -29,7 +29,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServlet;
 
 import org.ops4j.pax.vaadin.VaadinResourceService;
-import org.ops4j.pax.vaadin.internal.servlet.VaadinApplicationServlet;
+import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -40,7 +40,7 @@ import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.Application;
+import com.vaadin.ui.UI;
 
 public class PaxVaadinBundleTracker extends BundleTracker {
 
@@ -65,7 +65,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 			String applicationClass = (String) bundle.getHeaders().get(
 					org.ops4j.pax.vaadin.Constants.VAADIN_APPLICATION);
 			String alias = (String) bundle.getHeaders().get("Vaadin-Alias");
-			Application application = null;
+			UI application = null;
 			try {
 				Class appClazz = bundle.loadClass(applicationClass);
 
@@ -77,7 +77,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 						break;
 				}
 				ctor.setAccessible(true);
-				application = (Application) ctor.newInstance();
+				application = (UI) ctor.newInstance();
 
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -102,7 +102,8 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 			final String widgetset = findWidgetset(bundle);
 
 			if (application != null) {
-				VaadinApplicationServlet servlet = new VaadinApplicationServlet(application);
+			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(application);
+				//VaadinApplicationServlet servlet = new VaadinApplicationServlet(application);
 
 				Map<String, Object> props = new Hashtable<String, Object>();
 				props.put(ALIAS, alias);

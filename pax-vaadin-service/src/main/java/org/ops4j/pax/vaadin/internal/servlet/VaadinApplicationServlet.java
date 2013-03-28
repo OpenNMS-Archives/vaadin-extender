@@ -28,11 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ops4j.pax.swissbox.core.ContextClassLoaderUtils;
-import org.osgi.framework.Bundle;
 
-import com.vaadin.Application;
-import com.vaadin.terminal.gwt.server.AbstractApplicationServlet;
-import com.vaadin.terminal.gwt.server.ApplicationServlet;
+import com.vaadin.ui.UI;
 
 public class VaadinApplicationServlet extends HttpServlet {
 
@@ -40,7 +37,7 @@ public class VaadinApplicationServlet extends HttpServlet {
 	private ClassLoader classLoader;
 	private Servlet servlet;
 
-	public VaadinApplicationServlet(Application application) {
+	public VaadinApplicationServlet(UI application) {
 		classLoader = application.getClass().getClassLoader();
 		servlet = new AppServlet(application);
 	}
@@ -105,25 +102,12 @@ public class VaadinApplicationServlet extends HttpServlet {
 		}
 	}
 
-	private class AppServlet extends AbstractApplicationServlet {
+	private class AppServlet extends VaadinOSGiServlet {
 
-		private final Application application;
-
-		public AppServlet(Application application) {
-			this.application = application;
+		public AppServlet(UI application) {
+			super(application);
 		}
 
-		@Override
-		protected Application getNewApplication(HttpServletRequest request)
-				throws ServletException {
-			return application;
-		}
-
-		@Override
-		protected Class<? extends Application> getApplicationClass()
-				throws ClassNotFoundException {
-			return application.getClass();
-		}
 
 	}
 }
