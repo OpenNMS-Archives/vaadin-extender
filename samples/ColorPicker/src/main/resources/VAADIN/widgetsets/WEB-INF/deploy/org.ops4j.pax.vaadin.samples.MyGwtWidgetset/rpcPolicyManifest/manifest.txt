@@ -1,2 +1,0 @@
-# Module org.ops4j.pax.vaadin.samples.MyGwtWidgetset
-# RPC service class, partial path of RPC policy file
