@@ -20,8 +20,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.ui.UI;
-
 public class ApplicationFactoryServiceTracker extends ServiceTracker {
     
     private Map<ApplicationFactory, ServiceRegistration> m_serviceRegistration = new HashMap<ApplicationFactory, ServiceRegistration>();
@@ -37,7 +35,7 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
     @Override
     public Object addingService(ServiceReference reference) {
         ApplicationFactory factory = (ApplicationFactory) super.addingService(reference);
-        FactoryServlet servlet = new FactoryServlet(factory.getUI());
+        FactoryServlet servlet = new FactoryServlet(factory);
         Dictionary props = new Properties();
         
         for(String key : reference.getPropertyKeys()) {
@@ -75,8 +73,9 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
 
         private ApplicationFactory m_factory;
 
-        public FactoryServlet(UI application) {
-            super(application);
+        public FactoryServlet(ApplicationFactory factory) {
+            super(factory.getUI());
+            m_factory = factory;
         }
         
 //        @Override
