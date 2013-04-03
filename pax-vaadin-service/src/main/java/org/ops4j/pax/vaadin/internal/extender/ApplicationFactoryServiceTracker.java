@@ -74,7 +74,7 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
         private ApplicationFactory m_factory;
 
         public FactoryServlet(ApplicationFactory factory) {
-            super(factory.getUI());
+            super(factory);
             m_factory = factory;
         }
         

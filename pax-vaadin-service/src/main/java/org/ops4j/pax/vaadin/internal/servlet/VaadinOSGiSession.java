@@ -16,7 +16,7 @@ public final class VaadinOSGiSession extends VaadinSession {
       
       uiProviders = new ArrayList<UIProvider>() {
         {
-          add(new OSGiUIProvider(application));
+          //add(new OSGiUIProvider(application));
         }
       };
     }

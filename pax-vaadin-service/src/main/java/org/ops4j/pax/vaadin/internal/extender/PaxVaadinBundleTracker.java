@@ -24,10 +24,15 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
+import org.ops4j.pax.vaadin.ApplicationFactory;
+import org.ops4j.pax.vaadin.ScriptTag;
 import org.ops4j.pax.vaadin.VaadinResourceService;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.Bundle;
@@ -43,7 +48,56 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.ui.UI;
 
 public class PaxVaadinBundleTracker extends BundleTracker {
+    
+    private static class ApplicationFactoryWrapper implements ApplicationFactory{
+        
+        private UI m_application;
 
+        public ApplicationFactoryWrapper(UI application) {
+            m_application = application;
+        }
+        
+        @Override
+        public UI createApplication(HttpServletRequest request) throws ServletException {
+            return m_application;
+        }
+
+        @Override
+        public Class<? extends UI> getApplicationClass() throws ClassNotFoundException {
+            return m_application.getClass();
+        }
+
+        @Override
+        public UI getUI() {
+            return m_application;
+        }
+
+        @Override
+        public Map<String, String> getAdditionalHeaders() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public String getAdditionalHeadContent() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public List<ScriptTag> getAdditionalScripts() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public String getAdditionalBodyStartContent() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+        
+    }
+    
 	public static final String ALIAS = "alias";
 
 	private static final String VAADIN_PATH = "/VAADIN";
@@ -102,7 +156,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 			final String widgetset = findWidgetset(bundle);
 
 			if (application != null) {
-			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(application);
+			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(new ApplicationFactoryWrapper(application));
 				//VaadinApplicationServlet servlet = new VaadinApplicationServlet(application);
 
 				Map<String, Object> props = new Hashtable<String, Object>();

@@ -13,6 +13,11 @@
     <packaging>bundle</packaging>
 
     <build>
+	<resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -21,6 +26,9 @@
                 <configuration>
                     <instructions>
                         <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Fragment-Host>com.vaadin.themes;bundle-version=${vaadinVersion}</Fragment-Host>
                     </instructions>
                 </configuration>
             </plugin>
