@@ -38,15 +38,13 @@ public class VaadinOSGiServlet extends VaadinServlet {
 
             @Override
             public void sessionDestroy(SessionDestroyEvent event) {
-                event.getSession().close();
-                
+
             }
             
         });
         
         
         
-        //VaadinOSGiServletService servletService = new VaadinOSGiServletService(this, deploymentConfiguration, m_application);
         return service;
     }
 
