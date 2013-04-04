@@ -4,23 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
-import org.ops4j.pax.vaadin.ApplicationFactory;
+import org.ops4j.pax.vaadin.AbstractApplicationFactory;
 import org.ops4j.pax.vaadin.ScriptTag;
 
 import com.vaadin.ui.UI;
 
-public class ColorPickerApplicationFactory implements ApplicationFactory {
+public class ColorPickerApplicationFactory extends AbstractApplicationFactory {
 
     @Override
-    public UI createApplication(HttpServletRequest request) throws ServletException {
-        return new ColorPickerUI();
-    }
-
-    @Override
-    public Class<? extends UI> getApplicationClass() throws ClassNotFoundException {
+    public Class<? extends UI> getUIClass() {
         return ColorPickerUI.class;
     }
 

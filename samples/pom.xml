@@ -16,6 +16,6 @@
         <module>SimpleApplication</module>
         <module>SimpleTheme</module>
         <module>ColorPicker</module>
-        <module>sample-widgetset</module>
+        <!-- <module>sample-widgetset</module> -->
     </modules>
 </project>
