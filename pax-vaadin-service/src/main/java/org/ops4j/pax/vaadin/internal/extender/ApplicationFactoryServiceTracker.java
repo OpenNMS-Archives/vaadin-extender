@@ -31,7 +31,7 @@ public class ApplicationFactoryServiceTracker extends ServiceTracker {
         
     }
     
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     @Override
     public Object addingService(ServiceReference reference) {
         ApplicationFactory factory = (ApplicationFactory) super.addingService(reference);

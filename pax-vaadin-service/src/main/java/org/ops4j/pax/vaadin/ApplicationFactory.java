@@ -9,15 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import com.vaadin.ui.UI;
 
 public interface ApplicationFactory {
-
-    public UI createApplication(HttpServletRequest request) throws ServletException;
-    public Class<? extends UI> getApplicationClass() throws ClassNotFoundException;
     
-    public UI getUI();
+    @Deprecated
+    UI createApplication(HttpServletRequest request) throws ServletException;
     
-    public Map<String,String> getAdditionalHeaders();
-    public String getAdditionalHeadContent();
-    public List<ScriptTag> getAdditionalScripts();
-    public String getAdditionalBodyStartContent();
-
+    Class<? extends UI> getUIClass() throws ClassNotFoundException;
+    
+    UI getUI();
+    
+    Map<String,String> getAdditionalHeaders();
+    String getAdditionalHeadContent();
+    List<ScriptTag> getAdditionalScripts();
+    String getAdditionalBodyStartContent();
 }

@@ -10,7 +10,7 @@
     <groupId>org.ops4j.pax.vaadin.samples</groupId>
     <artifactId>SimpleTheme</artifactId>
     <name>Simple Theme</name>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <build>
 	<resources>

@@ -12,13 +12,16 @@ import com.vaadin.ui.UI;
 public abstract class AbstractApplicationFactory implements ApplicationFactory {
 
     @Override
-    public abstract UI createApplication(HttpServletRequest request) throws ServletException;
-
-    @Override
-    public abstract Class<? extends UI> getApplicationClass() throws ClassNotFoundException;
+    @Deprecated
+    public UI createApplication(HttpServletRequest request) throws ServletException {
+        return getUI();
+    }
 
     @Override
     public abstract UI getUI();
+    
+    @Override
+    public abstract Class<? extends UI> getUIClass();
     
     @Override
     public Map<String, String> getAdditionalHeaders() {

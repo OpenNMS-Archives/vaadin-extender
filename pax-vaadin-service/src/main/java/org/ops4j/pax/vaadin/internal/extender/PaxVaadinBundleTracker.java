@@ -63,7 +63,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
         }
 
         @Override
-        public Class<? extends UI> getApplicationClass() throws ClassNotFoundException {
+        public Class<? extends UI> getUIClass() throws ClassNotFoundException {
             return m_application.getClass();
         }
 
@@ -121,10 +121,10 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 			String alias = (String) bundle.getHeaders().get("Vaadin-Alias");
 			UI application = null;
 			try {
-				Class appClazz = bundle.loadClass(applicationClass);
+				Class<?> appClazz = bundle.loadClass(applicationClass);
 
-				Constructor[] ctors = appClazz.getDeclaredConstructors();
-				Constructor ctor = null;
+				Constructor<?>[] ctors = appClazz.getDeclaredConstructors();
+				Constructor<?> ctor = null;
 				for (int i = 0; i < ctors.length; i++) {
 					ctor = ctors[i];
 					if (ctor.getGenericParameterTypes().length == 0)
@@ -169,7 +169,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 				ServiceRegistration registeredServlet = bundle
 						.getBundleContext().registerService(
 								HttpServlet.class.getName(), servlet,
-								(Dictionary) props);
+								(Dictionary<?,?>) props);
 
 				registeredServlets.put(bundle, registeredServlet);
 			}
@@ -189,8 +189,9 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		return super.addingBundle(bundle, event);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String findWidgetset(Bundle bundle) {
-		Enumeration widgetEntries = bundle.findEntries("", "*.gwt.xml", true);
+		Enumeration<URL> widgetEntries = bundle.findEntries("", "*.gwt.xml", true);
 //		Enumeration widgetEntries = bundle.getEntryPaths(VAADIN_PATH);
 		if (widgetEntries == null || !widgetEntries.hasMoreElements())
 			return null;
@@ -215,7 +216,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 			}
 		}
 		*/
-		URL widgetUrl = (URL) widgetEntries.nextElement();
+		URL widgetUrl = widgetEntries.nextElement();
 		String path = widgetUrl.getPath();
 		path = path.substring(1,path.length()-8);
 		path = path.replace("/", ".");
@@ -249,8 +250,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		if ("com.vaadin".equals(bundle.getSymbolicName()))
 			return false;
 
-		@SuppressWarnings("rawtypes")
-		Enumeration vaadinPaths = bundle.getEntryPaths(VAADIN_PATH);
+		Enumeration<?> vaadinPaths = bundle.getEntryPaths(VAADIN_PATH);
 		if (vaadinPaths == null || !vaadinPaths.hasMoreElements())
 			return false;
 
