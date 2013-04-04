@@ -45,5 +45,7 @@
 
     
 
-    <inherits name="org.ops4j.pax.vaadin.samples.MyGwtWidgetset" />
+    
+
+    <inherits name="org.ops4j.pax.vaadin.samples.internal.MyGwtWidgetset" />
 </module>
