@@ -1,6 +1,10 @@
 package org.ops4j.pax.vaadin;
 
+import com.vaadin.annotations.JavaScript;
 
+/**
+ * @deprecated Use the {@link JavaScript} annotation from Vaadin 7 instead.
+ */
 public class ScriptTag {
 
     private String m_source;

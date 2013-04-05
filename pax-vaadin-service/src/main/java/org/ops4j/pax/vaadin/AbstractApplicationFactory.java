@@ -34,7 +34,7 @@ public abstract class AbstractApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public List<ScriptTag> getAdditionalScripts() {
+    public final List<ScriptTag> getAdditionalScripts() {
         return Collections.emptyList();
     }
 

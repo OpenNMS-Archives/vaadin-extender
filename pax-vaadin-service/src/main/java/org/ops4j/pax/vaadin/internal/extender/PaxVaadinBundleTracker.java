@@ -24,15 +24,11 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 
-import org.ops4j.pax.vaadin.ApplicationFactory;
-import org.ops4j.pax.vaadin.ScriptTag;
+import org.ops4j.pax.vaadin.AbstractApplicationFactory;
 import org.ops4j.pax.vaadin.VaadinResourceService;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.Bundle;
@@ -49,7 +45,7 @@ import com.vaadin.ui.UI;
 
 public class PaxVaadinBundleTracker extends BundleTracker {
     
-    private static class ApplicationFactoryWrapper implements ApplicationFactory{
+    private static class ApplicationFactoryWrapper extends AbstractApplicationFactory{
         
         private UI m_application;
 
@@ -58,12 +54,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
         }
         
         @Override
-        public UI createApplication(HttpServletRequest request) throws ServletException {
-            return m_application;
-        }
-
-        @Override
-        public Class<? extends UI> getUIClass() throws ClassNotFoundException {
+        public Class<? extends UI> getUIClass() {
             return m_application.getClass();
         }
 
@@ -80,12 +71,6 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 
         @Override
         public String getAdditionalHeadContent() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<ScriptTag> getAdditionalScripts() {
             // TODO Auto-generated method stub
             return null;
         }
