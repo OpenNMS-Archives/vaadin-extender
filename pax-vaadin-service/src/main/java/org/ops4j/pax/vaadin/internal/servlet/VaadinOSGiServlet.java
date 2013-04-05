@@ -1,5 +1,7 @@
 package org.ops4j.pax.vaadin.internal.servlet;
 
+import javax.servlet.ServletException;
+
 import org.ops4j.pax.vaadin.ApplicationFactory;
 
 import com.vaadin.server.DeploymentConfiguration;
@@ -28,17 +30,21 @@ public class VaadinOSGiServlet extends VaadinServlet {
 
             @Override
             public void sessionInit(SessionInitEvent event) throws ServiceException {
-                event.getSession().addUIProvider(new OSGiUIProvider(m_appFactory));
-                service.removeSessionInitListener(this);
+                if(event.getSession().getUIProviders().isEmpty()) {
+                    event.getSession().addUIProvider(new OSGiUIProvider(m_appFactory));
+                }
+                //service.removeSessionInitListener(this);
             }
             
         });
+        
+        
         
         service.addSessionDestroyListener(new SessionDestroyListener() {
 
             @Override
             public void sessionDestroy(SessionDestroyEvent event) {
-
+                
             }
             
         });
@@ -46,6 +52,11 @@ public class VaadinOSGiServlet extends VaadinServlet {
         
         
         return service;
+    }
+
+    @Override
+    protected void servletInitialized() throws ServletException {
+        System.out.println("servlet Initialized");
     }
 
 }
