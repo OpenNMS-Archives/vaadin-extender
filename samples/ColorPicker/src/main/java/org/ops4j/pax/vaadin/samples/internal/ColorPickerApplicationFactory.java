@@ -1,11 +1,9 @@
 package org.ops4j.pax.vaadin.samples.internal;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.ops4j.pax.vaadin.AbstractApplicationFactory;
-import org.ops4j.pax.vaadin.ScriptTag;
 
 import com.vaadin.ui.UI;
 
@@ -34,10 +32,6 @@ public class ColorPickerApplicationFactory extends AbstractApplicationFactory {
         return null;
     }
 
-    @Override
-    public List<ScriptTag> getAdditionalScripts() {
-        return null;
-    }
 
     @Override
     public String getAdditionalBodyStartContent() {
