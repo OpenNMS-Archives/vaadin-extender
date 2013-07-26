@@ -17,35 +17,24 @@
  */
 package org.ops4j.pax.vaadin.internal.extender;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.servlet.http.HttpServlet;
-
-import org.ops4j.pax.vaadin.AbstractApplicationFactory;
-import org.ops4j.pax.vaadin.VaadinResourceService;
+import com.vaadin.ui.UI;
+import org.ops4j.pax.vaadin.*;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
+import org.osgi.framework.*;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.ui.UI;
+import javax.servlet.http.HttpServlet;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.*;
 
 public class PaxVaadinBundleTracker extends BundleTracker {
     
-    private static class ApplicationFactoryWrapper extends AbstractApplicationFactory{
+    private static class ApplicationFactoryWrapper extends AbstractApplicationFactory {
         
         private UI m_application;
 
@@ -62,33 +51,11 @@ public class PaxVaadinBundleTracker extends BundleTracker {
         public UI getUI() {
             return m_application;
         }
-
-        @Override
-        public Map<String, String> getAdditionalHeaders() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public String getAdditionalHeadContent() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public String getAdditionalBodyStartContent() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-        
     }
-    
-	public static final String ALIAS = "alias";
 
-	private static final String VAADIN_PATH = "/VAADIN";
+    private static final Logger LOG = LoggerFactory.getLogger(PaxVaadinBundleTracker.class);
 
-	private final Logger logger = LoggerFactory
-			.getLogger(PaxVaadinBundleTracker.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(PaxVaadinBundleTracker.class.getName());
 
 	private final Map<Bundle, ServiceRegistration> registeredServlets = new HashMap<Bundle, ServiceRegistration>();
 
@@ -119,33 +86,25 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 				application = (UI) ctor.newInstance();
 
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error("Could not add bundle: ", e);
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                LOG.error("Could not add bundle: ", e);
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                LOG.error("Could not add bundle: ", e);
 			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                LOG.error("Could not add bundle: ", e);
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                LOG.error("Could not add bundle: ", e);
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                LOG.error("Could not add bundle: ", e);
 			}
 
 			final String widgetset = findWidgetset(bundle);
-
 			if (application != null) {
-			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(new ApplicationFactoryWrapper(application));
-				//VaadinApplicationServlet servlet = new VaadinApplicationServlet(application);
+			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(new ApplicationFactoryWrapper(application), bundle.getBundleContext());
 
 				Map<String, Object> props = new Hashtable<String, Object>();
-				props.put(ALIAS, alias);
+				props.put(org.ops4j.pax.vaadin.Constants.ALIAS, alias);
 
 				if (widgetset != null) {
 					props.put("widgetset", widgetset);
@@ -164,10 +123,8 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		if (isThemeBundle(bundle)) {
 			logger.debug("found a vaadin-resource bundle: {}", bundle);
 			// TODO do VAADIN Themese handling
-			ServiceReference serviceReference = bundle.getBundleContext()
-					.getServiceReference(VaadinResourceService.class.getName());
-			VaadinResourceService service = (VaadinResourceService) bundle
-					.getBundleContext().getService(serviceReference);
+			ServiceReference serviceReference = bundle.getBundleContext().getServiceReference(VaadinResourceService.class.getName());
+			VaadinResourceService service = (VaadinResourceService) bundle.getBundleContext().getService(serviceReference);
 			service.addResources(bundle);
 		}
 
@@ -181,26 +138,6 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		if (widgetEntries == null || !widgetEntries.hasMoreElements())
 			return null;
 
-		/*
-		while (widgetEntries.hasMoreElements()) {
-
-			String path = (String) widgetEntries.nextElement();
-
-			if (path.indexOf("widgetsets") != -1) {
-				Enumeration entryPaths = bundle.getEntryPaths(path);
-				while (entryPaths.hasMoreElements()){
-					path = (String) entryPaths.nextElement();
-					if (path.contains(".")) {
-						if (path.endsWith("/")) {
-							path = path.substring(0, path.length() - 1);
-						}
-						path = path.substring(path.lastIndexOf("/")+1);
-						return path;
-					}
-				}
-			}
-		}
-		*/
 		URL widgetUrl = widgetEntries.nextElement();
 		String path = widgetUrl.getPath();
 		path = path.substring(1,path.length()-8);
@@ -235,7 +172,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		if ("com.vaadin".equals(bundle.getSymbolicName()))
 			return false;
 
-		Enumeration<?> vaadinPaths = bundle.getEntryPaths(VAADIN_PATH);
+		Enumeration<?> vaadinPaths = bundle.getEntryPaths(org.ops4j.pax.vaadin.Constants.VAADIN_PATH);
 		if (vaadinPaths == null || !vaadinPaths.hasMoreElements())
 			return false;
 
@@ -255,27 +192,4 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 
 		return false;
 	}
-
-	/*
-	 * private class VaadinServletConfig implements ServletConfig {
-	 *
-	 * private HttpContext httpContext; private String widgetSets;
-	 *
-	 * public VaadinServletConfig(String widgetSets, HttpContext httpContext) {
-	 * this.widgetSets = widgetSets; this.httpContext = httpContext; }
-	 *
-	 * @Override public String getServletName() { return null; }
-	 *
-	 * @Override public ServletContext getServletContext() { return httpContext;
-	 * }
-	 *
-	 * @Override public Enumeration getInitParameterNames() { // TODO
-	 * Auto-generated method stub Vector<String> initParamNames = new
-	 * Vector<String>(); initParamNames.add("Widgetset"); return
-	 * initParamNames.elements(); }
-	 *
-	 * @Override public String getInitParameter(String name) { if
-	 * ("Widgetset".equalsIgnoreCase(name)) return widgetSets; return null; } }
-	 */
-
 }

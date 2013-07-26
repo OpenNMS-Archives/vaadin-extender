@@ -23,6 +23,7 @@ package org.ops4j.pax.vaadin;
  */
 public interface Constants {
 
-	public static final String VAADIN_APPLICATION = "Vaadin-Application";
-
+	String VAADIN_APPLICATION = "Vaadin-Application";
+    String ALIAS = "alias";
+    String VAADIN_PATH = "/VAADIN";
 }

@@ -17,20 +17,21 @@
  */
 package org.ops4j.pax.vaadin.internal;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServlet;
-
+import org.ops4j.pax.vaadin.SessionRepository;
 import org.ops4j.pax.vaadin.VaadinResourceService;
 import org.ops4j.pax.vaadin.internal.extender.ApplicationFactoryServiceTracker;
+import org.ops4j.pax.vaadin.internal.extender.OnmsServiceManagerServiceTracker;
 import org.ops4j.pax.vaadin.internal.extender.PaxVaadinBundleTracker;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinResourceServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServlet;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 /**
  * @author achim
@@ -41,29 +42,40 @@ public class Activator implements BundleActivator {
 	private BundleContext bundleContext;
 	private PaxVaadinBundleTracker bundleTracker;
 	private ServiceRegistration resourceService;
-    private ApplicationFactoryServiceTracker serviceTracker;
+    private ApplicationFactoryServiceTracker applicationFactoryServiceTracker;
+    private ServiceRegistration sessionRepositoryService;
+    private OnmsServiceManagerServiceTracker onmsServiceManagerServiceTracker;
 
-	public void start(BundleContext context) throws Exception {
+    public void start(BundleContext context) throws Exception {
 		bundleContext = context;
 		createAndRegisterVaadinResourceServlet();
 
-		bundleTracker = new PaxVaadinBundleTracker(bundleContext);
-		serviceTracker = new ApplicationFactoryServiceTracker(bundleContext);
+        sessionRepositoryService = bundleContext.registerService(SessionRepository.class.getName(), new SessionRepository(), null);
+        bundleTracker = new PaxVaadinBundleTracker(bundleContext);
+        applicationFactoryServiceTracker = new ApplicationFactoryServiceTracker(bundleContext);
+        onmsServiceManagerServiceTracker = new OnmsServiceManagerServiceTracker(bundleContext, (SessionRepository) bundleContext.getService(sessionRepositoryService.getReference()));
 
 		bundleTracker.open();
-		serviceTracker.open();
-
+		applicationFactoryServiceTracker.open();
+        onmsServiceManagerServiceTracker.open();
 	}
 
-	public void stop(BundleContext context) throws Exception {
+    public void stop(BundleContext context) throws Exception {
 		if (bundleTracker != null)
 			bundleTracker.close();
-		
-		if (serviceTracker != null)
-		    serviceTracker.close();
+
+		if (applicationFactoryServiceTracker != null)
+		    applicationFactoryServiceTracker.close();
+
+        if (onmsServiceManagerServiceTracker != null)
+            onmsServiceManagerServiceTracker.close();
 
 		if (resourceService != null)
 			resourceService.unregister();
+
+        if (sessionRepositoryService != null) {
+            sessionRepositoryService.unregister();
+        }
 	}
 
 	private void createAndRegisterVaadinResourceServlet() {
@@ -78,7 +90,7 @@ public class Activator implements BundleActivator {
 		Dictionary<String, String> props;
 
         props = new Hashtable<String, String>();
-        props.put("alias", VaadinResourceServlet._VAADIN);
+        props.put("alias", VaadinResourceServlet.VAADIN);
 
         HttpServlet vaadinResourceServlet = new VaadinResourceServlet(vaadin);
 

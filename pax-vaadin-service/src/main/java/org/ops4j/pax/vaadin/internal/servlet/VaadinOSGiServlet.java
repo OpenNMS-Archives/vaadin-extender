@@ -1,29 +1,25 @@
 package org.ops4j.pax.vaadin.internal.servlet;
 
+import com.vaadin.server.*;
+import org.ops4j.pax.vaadin.ApplicationFactory;
+import org.ops4j.pax.vaadin.SessionRepository;
+import org.osgi.framework.BundleContext;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.ServletException;
-
-import org.ops4j.pax.vaadin.ApplicationFactory;
-
-import com.vaadin.server.DeploymentConfiguration;
-import com.vaadin.server.ServiceException;
-import com.vaadin.server.SessionDestroyEvent;
-import com.vaadin.server.SessionDestroyListener;
-import com.vaadin.server.SessionInitEvent;
-import com.vaadin.server.SessionInitListener;
-import com.vaadin.server.VaadinServlet;
-import com.vaadin.server.VaadinServletService;
-import com.vaadin.server.VaadinSession;
-
 public class VaadinOSGiServlet extends VaadinServlet {
     private final OSGiUIProvider m_provider;
     private final Set<VaadinSession> m_sessions = Collections.synchronizedSet(new HashSet<VaadinSession>());
+    private final org.slf4j.Logger LOG = LoggerFactory.getLogger(getClass());
+    private final BundleContext m_context;
 
-    public VaadinOSGiServlet(final ApplicationFactory factory) {
+    public VaadinOSGiServlet(final ApplicationFactory factory, BundleContext bundleContext) {
         m_provider = new OSGiUIProvider(factory);
+        m_context = bundleContext;
     }
 
     @Override
@@ -40,9 +36,7 @@ public class VaadinOSGiServlet extends VaadinServlet {
                 }
             }
         });
-        
-        
-        
+
         service.addSessionDestroyListener(new SessionDestroyListener() {
             @Override
             public void sessionDestroy(SessionDestroyEvent event) {
@@ -52,17 +46,20 @@ public class VaadinOSGiServlet extends VaadinServlet {
                     session.removeUIProvider(m_provider);
                 }
             }
-            
         });
-        
-        
-        
+
+        // Additional listeners
+        SessionRepository sessionRepository = SessionRepository.getRepository(m_context);
+        if (sessionRepository != null) {
+            service.addSessionInitListener(sessionRepository);
+            service.addSessionDestroyListener(sessionRepository);
+        }
         return service;
     }
 
     @Override
     protected void servletInitialized() throws ServletException {
-        System.out.println("servlet Initialized");
+        LOG.info("Servlet Initialized");
     }
     
     @Override

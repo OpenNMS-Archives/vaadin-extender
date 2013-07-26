@@ -17,20 +17,20 @@
  */
 package org.ops4j.pax.vaadin.internal.servlet;
 
+import org.ops4j.pax.vaadin.Constants;
+import org.ops4j.pax.vaadin.VaadinResourceService;
+import org.osgi.framework.Bundle;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.ops4j.pax.vaadin.VaadinResourceService;
-import org.osgi.framework.Bundle;
 
 public class VaadinResourceServlet extends HttpServlet implements VaadinResourceService {
 
@@ -39,7 +39,7 @@ public class VaadinResourceServlet extends HttpServlet implements VaadinResource
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final String _VAADIN = "/VAADIN";
+	public static final String VAADIN = Constants.VAADIN_PATH;
 
 	private final Bundle vaadin;
 
@@ -54,7 +54,7 @@ public class VaadinResourceServlet extends HttpServlet implements VaadinResource
 			HttpServletResponse resp) throws ServletException,
 			IOException {
 		String path = req.getPathInfo();
-		String resourcePath = _VAADIN + path;
+		String resourcePath = VAADIN + path;
 
 		URL resourceUrl = vaadin.getResource(resourcePath);
 

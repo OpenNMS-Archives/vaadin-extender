@@ -24,7 +24,7 @@ public class ColorPickerUI extends UI {
             }
         });
         layout.addComponent(button);
-        
+
         ColorPicker cp = new ColorPicker();
         layout.addComponent(cp);
     }

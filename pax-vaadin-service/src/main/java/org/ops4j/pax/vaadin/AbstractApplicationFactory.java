@@ -1,13 +1,12 @@
 package org.ops4j.pax.vaadin;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.vaadin.ui.UI;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
-import com.vaadin.ui.UI;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractApplicationFactory implements ApplicationFactory {
 
