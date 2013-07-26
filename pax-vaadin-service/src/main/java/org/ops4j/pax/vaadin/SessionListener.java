@@ -1,4 +1,4 @@
-package org.ops4j.pax.vaadin.internal;
+package org.ops4j.pax.vaadin;
 
 public interface SessionListener {
     void sessionDestroyed(String sessionId);

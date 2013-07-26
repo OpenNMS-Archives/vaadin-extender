@@ -2,7 +2,7 @@ package org.ops4j.pax.vaadin.internal.servlet;
 
 import com.vaadin.server.*;
 import org.ops4j.pax.vaadin.ApplicationFactory;
-import org.ops4j.pax.vaadin.SessionRepository;
+import org.ops4j.pax.vaadin.SessionListenerRepository;
 import org.osgi.framework.BundleContext;
 import org.slf4j.LoggerFactory;
 
@@ -49,10 +49,10 @@ public class VaadinOSGiServlet extends VaadinServlet {
         });
 
         // Additional listeners
-        SessionRepository sessionRepository = SessionRepository.getRepository(m_context);
-        if (sessionRepository != null) {
-            service.addSessionInitListener(sessionRepository);
-            service.addSessionDestroyListener(sessionRepository);
+        SessionListenerRepository sessionListenerRepository = SessionListenerRepository.getRepository(m_context);
+        if (sessionListenerRepository != null) {
+            service.addSessionInitListener(sessionListenerRepository);
+            service.addSessionDestroyListener(sessionListenerRepository);
         }
         return service;
     }

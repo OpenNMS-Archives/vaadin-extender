@@ -17,10 +17,9 @@
  */
 package org.ops4j.pax.vaadin.internal;
 
-import org.ops4j.pax.vaadin.SessionRepository;
+import org.ops4j.pax.vaadin.SessionListenerRepository;
 import org.ops4j.pax.vaadin.VaadinResourceService;
 import org.ops4j.pax.vaadin.internal.extender.ApplicationFactoryServiceTracker;
-import org.ops4j.pax.vaadin.internal.extender.OnmsServiceManagerServiceTracker;
 import org.ops4j.pax.vaadin.internal.extender.PaxVaadinBundleTracker;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinResourceServlet;
 import org.osgi.framework.Bundle;
@@ -43,21 +42,18 @@ public class Activator implements BundleActivator {
 	private PaxVaadinBundleTracker bundleTracker;
 	private ServiceRegistration resourceService;
     private ApplicationFactoryServiceTracker applicationFactoryServiceTracker;
-    private ServiceRegistration sessionRepositoryService;
-    private OnmsServiceManagerServiceTracker onmsServiceManagerServiceTracker;
+    private ServiceRegistration sessionListenerRepositoryService;
 
     public void start(BundleContext context) throws Exception {
 		bundleContext = context;
 		createAndRegisterVaadinResourceServlet();
 
-        sessionRepositoryService = bundleContext.registerService(SessionRepository.class.getName(), new SessionRepository(), null);
+        sessionListenerRepositoryService = bundleContext.registerService(SessionListenerRepository.class.getName(), new SessionListenerRepository(bundleContext), null);
         bundleTracker = new PaxVaadinBundleTracker(bundleContext);
         applicationFactoryServiceTracker = new ApplicationFactoryServiceTracker(bundleContext);
-        onmsServiceManagerServiceTracker = new OnmsServiceManagerServiceTracker(bundleContext, (SessionRepository) bundleContext.getService(sessionRepositoryService.getReference()));
 
 		bundleTracker.open();
 		applicationFactoryServiceTracker.open();
-        onmsServiceManagerServiceTracker.open();
 	}
 
     public void stop(BundleContext context) throws Exception {
@@ -67,14 +63,11 @@ public class Activator implements BundleActivator {
 		if (applicationFactoryServiceTracker != null)
 		    applicationFactoryServiceTracker.close();
 
-        if (onmsServiceManagerServiceTracker != null)
-            onmsServiceManagerServiceTracker.close();
-
 		if (resourceService != null)
 			resourceService.unregister();
 
-        if (sessionRepositoryService != null) {
-            sessionRepositoryService.unregister();
+        if (sessionListenerRepositoryService != null) {
+            sessionListenerRepositoryService.unregister();
         }
 	}
 
