@@ -15,7 +15,6 @@
  */
 package org.pax.vaadin.samples.simple.app;
 
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;
@@ -29,13 +28,12 @@ import com.vaadin.ui.VerticalLayout;
  */
 @SuppressWarnings("serial")
 @Title("My Test Vaadin Application")
-@PreserveOnRefresh
 public class MyVaadinApplication extends UI
 {
     private VerticalLayout window;
 
     @Override
-    public void init(final VaadinRequest request)
+    public void init(VaadinRequest request)
     {
         window = new VerticalLayout();
         setContent(window);
@@ -45,15 +43,8 @@ public class MyVaadinApplication extends UI
                 window.addComponent(new Label("Thank you for clicking"));
             }
         });
-
-        Button button2 = new Button("Logout");
-        button2.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                request.getWrappedSession().invalidate();
-            }
-        });
         window.addComponent(button);
-        window.addComponent(button2);
+
     }
+
 }
