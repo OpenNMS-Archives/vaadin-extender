@@ -1,33 +1,14 @@
 package org.ops4j.pax.vaadin;
 
-import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.UI;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 public interface ApplicationFactory {
 
-    /**
-     * @deprecated The Application class was removed in Vaadin 7; 
-     * use {@link #getUI()} instead.
-     */
-    UI createApplication(HttpServletRequest request) throws ServletException;
+    Class<? extends UI> getUIClass();
 
-    Class<? extends UI> getUIClass() throws ClassNotFoundException;
-
-    UI getUI();
+    UI createUI();
 
     Map<String,String> getAdditionalHeaders();
-
-    String getAdditionalHeadContent();
-
-    /**
-     * @deprecated Use the {@link JavaScript} annotation from Vaadin 7 instead.
-     */
-    List<ScriptTag> getAdditionalScripts();
-
-    String getAdditionalBodyStartContent();
 }

@@ -1,11 +1,10 @@
 package org.ops4j.pax.vaadin.samples.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.vaadin.ui.UI;
 import org.ops4j.pax.vaadin.AbstractApplicationFactory;
 
-import com.vaadin.ui.UI;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ColorPickerApplicationFactory extends AbstractApplicationFactory {
 
@@ -15,7 +14,7 @@ public class ColorPickerApplicationFactory extends AbstractApplicationFactory {
     }
 
     @Override
-    public UI getUI() {
+    public UI createUI() {
         return new ColorPickerUI();
     }
 
@@ -24,18 +23,5 @@ public class ColorPickerApplicationFactory extends AbstractApplicationFactory {
         final Map<String,String> headers = new HashMap<String,String>();
         headers.put("X-UA-Compatible", "chrome=1");
         return headers;
-
     }
-
-    @Override
-    public String getAdditionalHeadContent() {
-        return null;
-    }
-
-
-    @Override
-    public String getAdditionalBodyStartContent() {
-        return null;
-    }
-
 }

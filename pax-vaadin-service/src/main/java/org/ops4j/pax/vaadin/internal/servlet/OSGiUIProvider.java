@@ -8,20 +8,20 @@ import org.ops4j.pax.vaadin.ApplicationFactory;
 
 public class OSGiUIProvider extends UIProvider {
     
-    private ApplicationFactory m_application;
+    private ApplicationFactory m_uiFactory;
     
     public OSGiUIProvider(ApplicationFactory appFactory) {
-        m_application = appFactory;
+        m_uiFactory = appFactory;
     }
     
     @Override
     public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
-        return m_application.getUI().getClass();
+       return m_uiFactory.getUIClass();
     }
     
     @Override
     public UI createInstance(final UICreateEvent e) {
-        return m_application.getUI();
+        return m_uiFactory.createUI();
     }
 
 }

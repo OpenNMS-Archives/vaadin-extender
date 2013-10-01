@@ -18,10 +18,10 @@
 package org.ops4j.pax.vaadin.internal.extender;
 
 import com.vaadin.ui.UI;
-import org.ops4j.pax.vaadin.*;
+import org.ops4j.pax.vaadin.AbstractApplicationFactory;
+import org.ops4j.pax.vaadin.VaadinResourceService;
 import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.*;
-import org.osgi.framework.Constants;
 import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +33,22 @@ import java.net.URL;
 import java.util.*;
 
 public class PaxVaadinBundleTracker extends BundleTracker {
-    
+
     private static class ApplicationFactoryWrapper extends AbstractApplicationFactory {
-        
+
         private UI m_application;
 
         public ApplicationFactoryWrapper(UI application) {
             m_application = application;
         }
-        
+
         @Override
         public Class<? extends UI> getUIClass() {
             return m_application.getClass();
         }
 
         @Override
-        public UI getUI() {
+        public UI createUI() {
             return m_application;
         }
     }
