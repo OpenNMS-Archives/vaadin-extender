@@ -56,6 +56,11 @@ public class VaadinResourceServlet extends HttpServlet implements VaadinResource
 		String path = req.getPathInfo();
 		String resourcePath = VAADIN + path;
 
+		String contentType = getServletContext().getMimeType(resourcePath);
+		if (contentType != null) {
+		    resp.setContentType(contentType);
+		}
+
 		URL resourceUrl = vaadin.getResource(resourcePath);
 
 		if (null == resourceUrl) {
