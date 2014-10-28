@@ -32,7 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
-public class PaxVaadinBundleTracker extends BundleTracker {
+public class PaxVaadinBundleTracker extends BundleTracker<Object> {
 
     private static class ApplicationFactoryWrapper extends AbstractApplicationFactory {
 
@@ -57,7 +57,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 
     private final Logger logger = LoggerFactory.getLogger(PaxVaadinBundleTracker.class.getName());
 
-	private final Map<Bundle, ServiceRegistration> registeredServlets = new HashMap<Bundle, ServiceRegistration>();
+	private final Map<Bundle, ServiceRegistration<?>> registeredServlets = new HashMap<Bundle, ServiceRegistration<?>>();
 
 	public PaxVaadinBundleTracker(BundleContext context) {
 		super(context, Bundle.ACTIVE, null);
@@ -110,10 +110,11 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 					props.put("widgetset", widgetset);
 				}
 
-				ServiceRegistration registeredServlet = bundle
+				@SuppressWarnings({"unchecked"})
+				ServiceRegistration<?> registeredServlet = bundle
 						.getBundleContext().registerService(
 								HttpServlet.class.getName(), servlet,
-								(Dictionary<?,?>) props);
+								(Dictionary<String,?>) props);
 
 				registeredServlets.put(bundle, registeredServlet);
 			}
@@ -122,8 +123,8 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 
 		if (isThemeBundle(bundle)) {
 			logger.debug("found a vaadin-resource bundle: {}", bundle);
-			// TODO do VAADIN Themese handling
-			ServiceReference serviceReference = bundle.getBundleContext().getServiceReference(VaadinResourceService.class.getName());
+			// TODO do VAADIN Themes handling
+			ServiceReference<?> serviceReference = bundle.getBundleContext().getServiceReference(VaadinResourceService.class.getName());
 			VaadinResourceService service = (VaadinResourceService) bundle.getBundleContext().getService(serviceReference);
 			service.addResources(bundle);
 		}
@@ -131,7 +132,6 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 		return super.addingBundle(bundle, event);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected String findWidgetset(Bundle bundle) {
 		Enumeration<URL> widgetEntries = bundle.findEntries("", "*.gwt.xml", true);
 //		Enumeration widgetEntries = bundle.getEntryPaths(VAADIN_PATH);
@@ -148,7 +148,7 @@ public class PaxVaadinBundleTracker extends BundleTracker {
 	@Override
 	public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
 
-		ServiceRegistration registeredServlet = registeredServlets.get(bundle);
+		ServiceRegistration<?> registeredServlet = registeredServlets.get(bundle);
 		if (registeredServlet != null)
 			registeredServlet.unregister();
 
