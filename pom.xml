@@ -15,7 +15,6 @@
 	<modules>
 		<module>pax-vaadin-service</module>
 		<module>pax-vaadin-feature</module>
-		<module>samples</module>
 	</modules>
 
 	<properties>
