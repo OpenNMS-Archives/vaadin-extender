@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.vaadin.internal;
+package org.opennms.vaadin.extender.internal;
 
-import org.ops4j.pax.vaadin.SessionListenerRepository;
-import org.ops4j.pax.vaadin.VaadinResourceService;
-import org.ops4j.pax.vaadin.internal.extender.ApplicationFactoryServiceTracker;
-import org.ops4j.pax.vaadin.internal.extender.PaxVaadinBundleTracker;
-import org.ops4j.pax.vaadin.internal.servlet.VaadinResourceServlet;
+import org.opennms.vaadin.extender.SessionListenerRepository;
+import org.opennms.vaadin.extender.VaadinResourceService;
+import org.opennms.vaadin.extender.internal.extender.ApplicationFactoryServiceTracker;
+import org.opennms.vaadin.extender.internal.extender.PaxVaadinBundleTracker;
+import org.opennms.vaadin.extender.internal.servlet.VaadinResourceServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -29,6 +29,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -38,58 +39,58 @@ import java.util.Hashtable;
  */
 public class Activator implements BundleActivator {
 
-	private BundleContext bundleContext;
-	private PaxVaadinBundleTracker bundleTracker;
-	private ServiceRegistration resourceService;
+    private BundleContext bundleContext;
+    private PaxVaadinBundleTracker bundleTracker;
+    private ServiceRegistration resourceService;
     private ApplicationFactoryServiceTracker applicationFactoryServiceTracker;
     private ServiceRegistration sessionListenerRepositoryService;
 
     public void start(BundleContext context) throws Exception {
-		bundleContext = context;
-		createAndRegisterVaadinResourceServlet();
+        bundleContext = context;
+        createAndRegisterVaadinResourceServlet();
 
         sessionListenerRepositoryService = bundleContext.registerService(SessionListenerRepository.class.getName(), new SessionListenerRepository(bundleContext), null);
         bundleTracker = new PaxVaadinBundleTracker(bundleContext);
         applicationFactoryServiceTracker = new ApplicationFactoryServiceTracker(bundleContext);
 
-		bundleTracker.open();
-		applicationFactoryServiceTracker.open();
-	}
+        bundleTracker.open();
+        applicationFactoryServiceTracker.open();
+    }
 
     public void stop(BundleContext context) throws Exception {
-		if (bundleTracker != null)
-			bundleTracker.close();
+        if (bundleTracker != null)
+            bundleTracker.close();
 
-		if (applicationFactoryServiceTracker != null)
-		    applicationFactoryServiceTracker.close();
+        if (applicationFactoryServiceTracker != null)
+            applicationFactoryServiceTracker.close();
 
-		if (resourceService != null)
-			resourceService.unregister();
+        if (resourceService != null)
+            resourceService.unregister();
 
         if (sessionListenerRepositoryService != null) {
             sessionListenerRepositoryService.unregister();
         }
-	}
+    }
 
-	private void createAndRegisterVaadinResourceServlet() {
-		Bundle vaadin = null;
-		for (Bundle bundle : bundleContext.getBundles()) {
-			if ("com.vaadin.client-compiled".equals(bundle.getSymbolicName())) {
-				vaadin = bundle;
-				break;
-			}
-		}
+    private void createAndRegisterVaadinResourceServlet() {
+        Bundle vaadin = null;
+        for (Bundle bundle : bundleContext.getBundles()) {
+            if ("com.vaadin.client-compiled".equals(bundle.getSymbolicName())) {
+                vaadin = bundle;
+                break;
+            }
+        }
 
-		Dictionary<String, String> props;
+        Dictionary<String, String> props;
 
         props = new Hashtable<String, String>();
         props.put("alias", VaadinResourceServlet.VAADIN);
 
         HttpServlet vaadinResourceServlet = new VaadinResourceServlet(vaadin);
 
-		resourceService = bundleContext.registerService( Servlet.class.getName(), vaadinResourceServlet, props );
+        resourceService = bundleContext.registerService( Servlet.class.getName(), vaadinResourceServlet, props );
 
-		bundleContext.registerService(VaadinResourceService.class.getName(), vaadinResourceServlet, null);
-	}
+        bundleContext.registerService(VaadinResourceService.class.getName(), vaadinResourceServlet, null);
+    }
 
 }

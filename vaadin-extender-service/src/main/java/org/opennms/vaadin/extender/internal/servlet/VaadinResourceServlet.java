@@ -15,16 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.vaadin.internal.servlet;
+package org.opennms.vaadin.extender.internal.servlet;
 
-import org.ops4j.pax.vaadin.Constants;
-import org.ops4j.pax.vaadin.VaadinResourceService;
+import org.opennms.vaadin.extender.Constants;
+import org.opennms.vaadin.extender.VaadinResourceService;
 import org.osgi.framework.Bundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

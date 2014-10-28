@@ -4,12 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>vaadin</artifactId>
-        <groupId>org.ops4j.pax</groupId>
-        <version>0.3.1-SNAPSHOT</version>
+        <groupId>org.opennms</groupId>
+        <artifactId>vaadin-extender</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
-    <groupId>org.ops4j.pax.vaadin</groupId>
+    <groupId>org.opennms.vaadin-extender</groupId>
     <artifactId>feature</artifactId>
     <packaging>pom</packaging>
     <name>Simple Vaadin 7 Feature</name>
@@ -17,7 +18,7 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.ops4j.pax.vaadin</groupId>
+            <groupId>org.opennms.vaadin-extender</groupId>
             <artifactId>service</artifactId>
             <version>${project.version}</version>
         </dependency>

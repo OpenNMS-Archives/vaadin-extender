@@ -1,8 +1,8 @@
-package org.ops4j.pax.vaadin.internal.extender;
+package org.opennms.vaadin.extender.internal.extender;
 
-import org.ops4j.pax.vaadin.ApplicationFactory;
-import org.ops4j.pax.vaadin.Constants;
-import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
+import org.opennms.vaadin.extender.ApplicationFactory;
+import org.opennms.vaadin.extender.Constants;
+import org.opennms.vaadin.extender.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -14,6 +14,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;

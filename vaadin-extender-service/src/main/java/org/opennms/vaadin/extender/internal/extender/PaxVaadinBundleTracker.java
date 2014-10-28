@@ -15,18 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.vaadin.internal.extender;
+package org.opennms.vaadin.extender.internal.extender;
 
 import com.vaadin.ui.UI;
-import org.ops4j.pax.vaadin.AbstractApplicationFactory;
-import org.ops4j.pax.vaadin.VaadinResourceService;
-import org.ops4j.pax.vaadin.internal.servlet.VaadinOSGiServlet;
+
+import org.opennms.vaadin.extender.AbstractApplicationFactory;
+import org.opennms.vaadin.extender.VaadinResourceService;
+import org.opennms.vaadin.extender.internal.servlet.VaadinOSGiServlet;
 import org.osgi.framework.*;
 import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -69,7 +71,7 @@ public class PaxVaadinBundleTracker extends BundleTracker<Object> {
 		if (isApplicationBundle(bundle)) {
 			logger.debug("found a vaadin-app bundle: {}", bundle);
 			String applicationClass = (String) bundle.getHeaders().get(
-					org.ops4j.pax.vaadin.Constants.VAADIN_APPLICATION);
+					org.opennms.vaadin.extender.Constants.VAADIN_APPLICATION);
 			String alias = (String) bundle.getHeaders().get("Vaadin-Alias");
 			UI application = null;
 			try {
@@ -104,7 +106,7 @@ public class PaxVaadinBundleTracker extends BundleTracker<Object> {
 			    VaadinOSGiServlet servlet = new VaadinOSGiServlet(new ApplicationFactoryWrapper(application), bundle.getBundleContext());
 
 				Map<String, Object> props = new Hashtable<String, Object>();
-				props.put(org.ops4j.pax.vaadin.Constants.ALIAS, alias);
+				props.put(org.opennms.vaadin.extender.Constants.ALIAS, alias);
 
 				if (widgetset != null) {
 					props.put("widgetset", widgetset);
@@ -160,7 +162,7 @@ public class PaxVaadinBundleTracker extends BundleTracker<Object> {
 			return false;
 
 		String applicationClass = (String) bundle.getHeaders().get(
-				org.ops4j.pax.vaadin.Constants.VAADIN_APPLICATION);
+				org.opennms.vaadin.extender.Constants.VAADIN_APPLICATION);
 
 		if (applicationClass != null && !applicationClass.isEmpty())
 			return true;
@@ -172,7 +174,7 @@ public class PaxVaadinBundleTracker extends BundleTracker<Object> {
 		if ("com.vaadin".equals(bundle.getSymbolicName()))
 			return false;
 
-		Enumeration<?> vaadinPaths = bundle.getEntryPaths(org.ops4j.pax.vaadin.Constants.VAADIN_PATH);
+		Enumeration<?> vaadinPaths = bundle.getEntryPaths(org.opennms.vaadin.extender.Constants.VAADIN_PATH);
 		if (vaadinPaths == null || !vaadinPaths.hasMoreElements())
 			return false;
 

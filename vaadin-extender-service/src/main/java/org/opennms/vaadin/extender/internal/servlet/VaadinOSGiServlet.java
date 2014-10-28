@@ -1,12 +1,14 @@
-package org.ops4j.pax.vaadin.internal.servlet;
+package org.opennms.vaadin.extender.internal.servlet;
 
 import com.vaadin.server.*;
-import org.ops4j.pax.vaadin.ApplicationFactory;
-import org.ops4j.pax.vaadin.SessionListenerRepository;
+
+import org.opennms.vaadin.extender.ApplicationFactory;
+import org.opennms.vaadin.extender.SessionListenerRepository;
 import org.osgi.framework.BundleContext;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

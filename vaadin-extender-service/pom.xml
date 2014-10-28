@@ -2,15 +2,15 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>vaadin</artifactId>
-        <groupId>org.ops4j.pax</groupId>
-        <version>0.3.1-SNAPSHOT</version>
+        <groupId>org.opennms</groupId>
+        <artifactId>vaadin-extender</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <groupId>org.ops4j.pax.vaadin</groupId>
+    <groupId>org.opennms.vaadin-extender</groupId>
     <artifactId>service</artifactId>
     <packaging>bundle</packaging>
-    <name>Pax Vaadin Service</name>
+    <name>OpenNMS Vaadin Extender Service</name>
     <description>Vaadin Extender bootstrapping Vaadin apps</description>
 
 
@@ -82,7 +82,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
-                        <Bundle-Activator>org.ops4j.pax.vaadin.internal.Activator</Bundle-Activator>
+                        <Bundle-Activator>org.opennms.vaadin.extender.internal.Activator</Bundle-Activator>
                         <Embed-Dependency>*; scope=compile; type=!pom; inline=true</Embed-Dependency>
                     </instructions>
                 </configuration>

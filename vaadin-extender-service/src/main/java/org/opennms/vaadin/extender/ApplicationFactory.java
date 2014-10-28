@@ -1,4 +1,4 @@
-package org.ops4j.pax.vaadin;
+package org.opennms.vaadin.extender;
 
 import com.vaadin.ui.UI;
 

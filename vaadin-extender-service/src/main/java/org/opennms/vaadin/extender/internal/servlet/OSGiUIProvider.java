@@ -1,10 +1,11 @@
-package org.ops4j.pax.vaadin.internal.servlet;
+package org.opennms.vaadin.extender.internal.servlet;
 
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
-import org.ops4j.pax.vaadin.ApplicationFactory;
+
+import org.opennms.vaadin.extender.ApplicationFactory;
 
 public class OSGiUIProvider extends UIProvider {
     

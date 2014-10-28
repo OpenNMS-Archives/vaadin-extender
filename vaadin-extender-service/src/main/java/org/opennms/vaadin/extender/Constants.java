@@ -15,14 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.vaadin;
+package org.opennms.vaadin.extender;
 
-import org.osgi.framework.Bundle;
+/**
+ * @author achim
+ *
+ */
+public interface Constants {
 
-public interface VaadinResourceService {
-
-	void addResources(Bundle bundle);
-
-	void removeResources(Bundle bundle);
-
+	String VAADIN_APPLICATION = "Vaadin-Application";
+    String ALIAS = "alias";
+    String VAADIN_PATH = "/VAADIN";
 }
